@@ -15,12 +15,14 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
     - name: Set up JDK
       uses: actions/setup-java@v4
       with:
         java-version: '21'
         distribution: 'temurin'
         cache: 'sbt'
+    - name: Set up Scala and SBT
+      uses: sbt/setup-sbt@v1
     - name: Run tests
       run: sbt test
