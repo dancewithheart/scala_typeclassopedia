@@ -22,5 +22,7 @@ jobs:
         java-version: '21'
         distribution: 'temurin'
         cache: 'sbt'
+    - name: Set up Scala and SBT
+      uses: sbt/setup-sbt@v1
     - name: Run tests
       run: sbt test
