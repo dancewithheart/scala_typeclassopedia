@@ -64,10 +64,10 @@ def widen[A, B >: A](fa: F[A]): F[B]
 
 * Functors can compose: Cats [ComposedFunctor](https://github.com/typelevel/cats/blob/master/core/src/main/scala/cats/Composed.scala#L20-L26) [compose](https://github.com/typelevel/cats/blob/master/core/src/main/scala/cats/Functor.scala#L147-L151), [Scalaz 7](https://github.com/scalaz/scalaz/blob/series/7.3.x/core/src/main/scala/scalaz/Functor.scala#L61-L66)
 
-* An examples for [instances for built in types](https://github.com/lemastero/scala_typeclassopedia/blob/main/src/test/scala/bifunctor/BicovariantExamplesSpec.scala),
+* An examples for [instances for built in types](./src/test/scala/bifunctor/BicovariantExamplesSpec.scala),
   [function1](https://www.youtube.com/watch?v=Dsd4pc99FSY&t=1075),
-  and [custom Tree type](https://github.com/lemastero/learn_scala_cats/blob/master/src/main/scala/functor/TreeFunctor.scala).
-  An examples for [usage of map, derived methods, compose](https://github.com/lemastero/learn_scala_cats/blob/master/src/test/scala/functor/FunctorExamplesSpec.scala).
+  and [custom Tree type](./src/main/scala/educational/collections/Tree.scala) and [tests](./src/test/scala/functor/TreeFunctorSpec.scala).
+  An examples for [usage of map, derived methods, compose](./src/test/scala/functor/CovariantExamplesSpec.scala).
 
 Functor definition does not require any conditions on type constructor `F` or any other operations (unlike Applicative, Monad).
 Therefore pretty much everything is a Functor. Notable exceptions are:
@@ -382,9 +382,9 @@ def factor[A, B](ma: F[A], mb: F[B]): F[(A, B)]
 
 * Monads can't be filtered. You can use Moand Filter for that.
 
-* Example (translated from John Huges mind blowing workshop: Monads and all that) [instance for custom Tree](https://github.com/lemastero/learn_scala_cats/blob/master/src/main/scala/monad/TreeMonad.scala)
-  and [usage of flatMap to implement functions zip and number](https://github.com/lemastero/learn_scala_cats/blob/master/src/main/scala/helper_implementations/Tree.scala)
-  (using [State Int](https://github.com/lemastero/learn_scala_cats/blob/master/src/main/scala/monad/IntState.scala)).
+* Example (translated from John Huges mind blowing workshop: Monads and all that) [instance for custom Tree](./src/main/scala/educational/collections/Tree.scala)
+  and [usage of flatMap to implement functions zip and number](./src/main/scala/examples/Tree.scala)
+  (using [State Int](./src/main/scala/examples/IntState.scala)).
 
 * Resources
     * FSiS 3 - Monad type class - Michael Pilquist [(vido 14:44)](https://www.youtube.com/watch?v=VWCtLhH815M&t=884)
@@ -513,7 +513,7 @@ trait StateMonad[F[_],S] extends Monad[F] {
 
 ### SuperMonads
 
-* Implementations: [Haskell](https://hackage.haskell.org/package/supermonad/),[purescript-supermonad](https://github.com/lemastero/purescript-supermonad), [Agda](https://github.com/jbracker/polymonad-proofs/tree/master/src/Supermonad)
+* Implementations: [Haskell](https://hackage.haskell.org/package/supermonad/),[purescript-supermonad](http://github.com/dancewithheart/purescript-supermonad), [Agda](https://github.com/jbracker/polymonad-proofs/tree/master/src/Supermonad)
 
 * Resources
    * (Haskell) Supermonads and superapplicatives - Jan Bracker and Henrik Nilsson ([pdf](https://www.cs.nott.ac.uk/~psxjb5/publications/2017-BrackerNilsson-SupermonadsAndSuperapplicatives-UnderConsideration.pdf)
@@ -888,7 +888,7 @@ trait MonoidK[F[_]] extends SemigroupK[F] {
 * Implementations [Cats](https://github.com/typelevel/cats/blob/master/core/src/main/scala/cats/FunctorFilter.scala)
 
 * Resources
-    * Finding all permutations of list: [(blog post haskell)](https://byorgey.wordpress.com/2007/06/26/deducing-code-from-types-filterm/) [(translation to Scala using Cats)](https://github.com/lemastero/learn_scala_cats/blob/master/src/test/scala/mtl/TraverseEmptyListPermutationsSpec.scala)
+    * Finding all permutations of list: [(blog post haskell)](https://byorgey.wordpress.com/2007/06/26/deducing-code-from-types-filterm/) [(translation to Scala using Cats)](./src/test/scala/mtl/TraverseEmptyListPermutationsSpec.scala)
 
 ### TraverseFilter
 
