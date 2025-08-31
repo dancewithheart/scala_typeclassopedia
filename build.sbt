@@ -2,12 +2,9 @@ name := "scala_typeclassopedia"
 
 version := "0.0.1"
 
-lazy val scala212 = "2.12.20"
-lazy val scala213 = "2.13.15"
+lazy val scala213 = "2.13.16"
 
 scalaVersion := scala213
-
-crossScalaVersions := List(scala212, scala213)
 
 resolvers += Resolver.sonatypeRepo("snapshots")
 
@@ -35,18 +32,18 @@ libraryDependencies ++= Seq(
   "dev.zio" %% "zio-prelude"  % "1.0.0-RC35",
 
   // algebra
-  "org.typelevel" %% "algebra" % "2.12.0",
+  "org.typelevel" %% "algebra" % "2.13.0",
   "com.twitter" %% "algebird-core" % "0.13.10",
 
   // type level
   "com.codecommit" %% "skolems" % "0.2.1",
-  "com.chuusai" %% "shapeless" % "2.3.12",
+  "com.chuusai" %% "shapeless" % "2.3.13",
 
   // tofu
   "tf.tofu" %% "tofu" % "0.13.6",
 
   // izumi
-  "io.7mind.izumi" %% "fundamentals-bio" % "1.2.16",
+  "io.7mind.izumi" %% "fundamentals-bio" % "1.2.20",
 
   // HoTT in Scala
   "io.github.siddhartha-gadgil" %% "provingground-core-jvm" % "0.1.1",
