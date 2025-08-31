@@ -93,7 +93,7 @@ def widen[A, B, C >: A, D >: B](fab: F[A, B]): F[C, D]
 
 * Implementations: [Cats](https://github.com/typelevel/cats/blob/master/core/src/main/scala/cats/Bifunctor.scala), [Scalaz 7](https://github.com/scalaz/scalaz/blob/series/7.3.x/core/src/main/scala/scalaz/Bifunctor.scala), [Scalaz 8](https://github.com/scalaz/scalaz/blob/series/8.0.x/base/shared/src/main/scala/scalaz/tc/bifunctor.scala), [Haskell](https://hackage.haskell.org/package/base/docs/Data-Bifunctor.html), [Purescript](https://pursuit.purescript.org/packages/purescript-bifunctors/docs/Data.Bifunctor), [Idris](https://github.com/japesinator/Idris-Bifunctors/blob/master/src/Data/Bifunctor.idr), [Agda](https://github.com/agda/agda-categories/blob/master/src/Categories/Functor/Bifunctor.agda)
 
-* Instances [can be defined](https://github.com/lemastero/learn_scala_cats/blob/master/src/main/scala/functor/bifunctor/InstancesForForBuildInTypes.scala) for: Tuple2, Either, Validated. For Function1 not - functions are contravariant for input type.
+* Instances [can be defined](./src/main/scala/educational/category_theory/two/bifunctors/Bifunctor.scala) for: Tuple2, Either, Validated, but not for Function1 as it is contravariant for input type.
 
 * Resources
   * [Scalaz example](https://github.com/scalaz/scalaz/blob/series/7.3.x/example/src/main/scala/scalaz/example/BifunctorUsage.scala)

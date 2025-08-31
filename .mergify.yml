@@ -4,7 +4,7 @@ pull_request_rules:
       - author=scala-steward
     actions:
       assign:
-        users: [lemastero]
+        users: [dancewithheart]
       label:
         add: [dependency-update]
   - name: merge Scala Steward's PRs

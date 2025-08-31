@@ -2,17 +2,14 @@ name := "scala_typeclassopedia"
 
 version := "0.0.1"
 
-lazy val scala212 = "2.12.20"
-lazy val scala213 = "2.13.15"
+lazy val scala213 = "2.13.16"
 
 scalaVersion := scala213
 
-crossScalaVersions := List(scala212, scala213)
-
 resolvers += Resolver.sonatypeRepo("snapshots")
 
-lazy val catsVersion = "2.12.0"
-lazy val catsMtlVersion = "1.5.0"
+lazy val catsVersion = "2.13.0"
+lazy val catsMtlVersion = "1.6.0"
 lazy val scalaTestPlusVersion = "3.1.0.0-RC2"
 lazy val scalacheckVersion = "1.18.1"
 libraryDependencies ++= Seq(
@@ -23,30 +20,17 @@ libraryDependencies ++= Seq(
   "org.typelevel" %% "alleycats-core" % catsVersion,
   "org.typelevel" %% "cats-mtl" % catsMtlVersion,
   "org.typelevel" %% "cats-mtl-laws" % catsMtlVersion,
-  "org.typelevel" %% "cats-effect" % "2.5.5",
-
-  "io.monix" %% "monix" % "3.4.1",
 
   // Scalaz
   "org.scalaz"    %% "scalaz-core" % "7.3.8",
 
   // ZIO
-  "dev.zio" %% "zio" % "2.1.13",
-  "dev.zio" %% "zio-prelude"  % "1.0.0-RC35",
+  "dev.zio" %% "zio" % "2.1.20",
+  "dev.zio" %% "zio-prelude"  % "1.0.0-RC41",
 
   // algebra
-  "org.typelevel" %% "algebra" % "2.12.0",
+  "org.typelevel" %% "algebra" % "2.13.0",
   "com.twitter" %% "algebird-core" % "0.13.10",
-
-  // type level
-  "com.codecommit" %% "skolems" % "0.2.1",
-  "com.chuusai" %% "shapeless" % "2.3.12",
-
-  // tofu
-  "tf.tofu" %% "tofu" % "0.13.6",
-
-  // izumi
-  "io.7mind.izumi" %% "fundamentals-bio" % "1.2.16",
 
   // HoTT in Scala
   "io.github.siddhartha-gadgil" %% "provingground-core-jvm" % "0.1.1",
