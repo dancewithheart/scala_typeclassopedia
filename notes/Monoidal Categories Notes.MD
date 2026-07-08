@@ -97,7 +97,7 @@ If we represent category signature in following way:
 ```scala
 trait Category[Morphism[_,_]] {
   def id[Object]: Morphism[Object,Object]
-  def compose[A,B,C](f: Morphism[B,C])(g: Morphism[A,B]): Morphism[A,C]
+  def compose[A,B,C](f: Morphism[B,C])(g: Morphism): Morphism[A,C]
 }
 ```
 
@@ -122,7 +122,7 @@ trait MonoidalCategory[:=>[_,_],⊗[_, _], I]
   def ρ_inv[A](a:  A):   A⊗I
 
   def λ[A]      (fa: I⊗A): A
-  def λ_inv[A,B](a:  A):   I⊗A
+  def λ_inv[A](a:  A):   I⊗A
 
   def α[A,B,C](    fa: (A⊗B)⊗C): A⊗(B⊗C)
   def α_inv[A,B,C](fa: A⊗(B⊗C)): (A⊗B)⊗C
@@ -196,7 +196,7 @@ trait TupleMc
   def ρ[A](fa: (A, Unit)): A = fa._1
   def ρ_inv[A](a: A): (A, Unit) = (a, ())
   def λ[A](fa: (Unit, A)): A = fa._2
-  def λ_inv[A, B](a: A): (Unit, A) = ((), a)
+  def λ_inv[A](a: A): (Unit, A) = ((), a)
   def α[A, B, C](fa: ((A, B), C)): (A, (B, C)) = fa match {case ((a,b),c) => (a, (b, c)) }
   def α_inv[A, B, C](fa: (A, (B, C))): ((A, B), C) = fa match {case (a,(b,c)) => ((a, b), c) }
 }
@@ -229,7 +229,7 @@ trait Function1EitherMc
   def ρ[A](fa: Either[A, Void]): A = fa match { case Left(a) => a }
   def ρ_inv[A](a: A): Either[A, Void] = Left(a)
   def λ[A](fa: Either[Void, A]): A = fa match { case Right(a) => a }
-  def λ_inv[A, B](a: A): Either[Void, A] = Right(a)
+  def λ_inv[A](a: A): Either[Void, A] = Right(a)
   def α[A, B, C](fa: Either[Either[A, B], C]): Either[A, Either[B, C]] =
     fa match {
       case Left(Left(a)) => Left(a)
