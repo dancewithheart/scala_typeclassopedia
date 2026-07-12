@@ -16,5 +16,5 @@ trait VFunctor[OBJC[_],C[_,_],OBJD[_],D[_,_],F[_]] {
   def c2: VCategory[OBJD,D]
   def f[X]: OBJC[X] => OBJD[F[X]]
 
-  def map[X,Y](implicit x: OBJC[X], y: OBJD[Y]): C[X,Y] => D[F[X],F[Y]]
+  def map[X,Y](implicit ox: OBJC[X], oy: OBJC[Y]): C[X,Y] => D[F[X], F[Y]]
 }

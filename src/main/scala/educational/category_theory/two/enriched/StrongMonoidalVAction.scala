@@ -23,8 +23,8 @@ trait StrongMonoidalVAction[OBJM[_],M[_,_],O[_,_],I,OBJC[_],C[_,_],F[_,_]] {
 
   def unitor[X](implicit ox: OBJC[X]): C[F[I,X],X]
   def unitorinv[X](implicit ox: OBJC[X]): C[X,F[I,X]]
-  def multiplicator[X,P,Q](implicit ox: OBJC[X], op: OBJC[P], oq: OBJC[Q]):
-    C[F[P,F[Q,X]],F[O[P,Q],X]]
-  def multiplicatorinv[X,P,Q](implicit ox: OBJC[X], op: OBJC[P], oq: OBJC[Q]):
-    C[F[O[P,Q],X],F[P,F[Q,X]]]
+  def multiplicator[X,P,Q](implicit ox: OBJC[X], op: OBJM[P], oq: OBJM[Q]):
+    C[F[P,F[Q,X]], F[O[P,Q],X]]
+  def multiplicatorinv[X,P,Q](implicit ox: OBJC[X], op: OBJM[P], oq: OBJM[Q]):
+    C[F[O[P,Q],X], F[P,F[Q,X]]]
 }

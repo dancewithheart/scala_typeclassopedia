@@ -11,16 +11,24 @@ package educational.category_theory.two.enriched
         -> Optic objc c objd d objm m o i f g a b s t
 
   */
-trait Optic[OBJC[_],C[_,_],OBJD[_],D[_,_],OBJM[_],M[_,_],O[_,_],I,F[_,_],G[_,_],A,B,S,T] {
+trait Optic[
+  OBJC[_], C[_, _],
+  OBJD[_], D[_, _],
+  OBJM[_], M[_, _],
+  O[_, _], I,
+  F[_, _], G[_, _],
+  A, B, S, T
+] {
    def maf: StrongMonoidalVAction[OBJM,M,O,I,OBJC,C,F]
    def mag: StrongMonoidalVAction[OBJM,M,O,I,OBJD,D,G]
    def oa: OBJC[A]
-   def os: OBJC[S]
    def ob: OBJD[B]
+   def os: OBJC[S]
    def ot: OBJD[T]
+   def ox: OBJM[X]
    type X
-   def l: C[S,F[X,A]]
-   def r: D[G[X,B],T]
+   def l: C[S, F[X,A]]
+   def r: D[G[X,B], T]
 }
 
 object Optic {
@@ -34,7 +42,7 @@ object Optic {
     aot: OBJD[T],
     al: C[S,F[XX,A]],
     ar: D[G[XX,B],T],
-    ox: OBJM[XX]
+    aox: OBJM[XX]
   ): Optic[OBJC,C,OBJD,D,OBJM,M,O,I,F,G,A,B,S,T] = {
     new Optic[OBJC,C,OBJD,D,OBJM,M,O,I,F,G,A,B,S,T] {
       def maf: StrongMonoidalVAction[OBJM,M,O,I,OBJC,C,F] = amaf
@@ -43,6 +51,7 @@ object Optic {
       def os: OBJC[S] = aos
       def ob: OBJD[B] = aob
       def ot: OBJD[T] = aot
+      def ox: OBJM[XX] = aox
       type X = XX
       def l: C[S, F[XX, A]] = al
       def r: D[G[XX, B], T] = ar

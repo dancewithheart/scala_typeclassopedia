@@ -14,5 +14,5 @@ trait VProfunctor[OBJC[_],C[_,_],OBJD[_],D[_,_],P[_,_]] {
   def cd: VCategory[OBJD,D]
 
   def dimap[X1,X2,Y1,Y2](implicit ox1: OBJC[X1], ox2: OBJC[X2], oy1: OBJD[Y1], oy2: OBJD[Y2]):
-    C[X2,X1] => D[Y1,Y2] => P[X1,X2] => P[X2,Y2]
+    C[X2,X1] => D[Y1,Y2] => P[X1,Y1] => P[X2,Y2]
 }
