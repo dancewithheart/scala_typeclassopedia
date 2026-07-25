@@ -268,34 +268,209 @@ def mapLikeDerivedLaw[A, B](f: A => B, fa: F[A]): Boolean = {
 
 ### Selective (Selective applicative functors)
 
-"Extend the Applicative type class with a single method
-that makes it possible to be selective about effects."
+### Selective (Selective Applicative Functors)
 
-"handle is a selective function application:
-you apply a handler function of type A => B when given a value of type Left(a),
-but can skip the handler (along with its effects) in the case of Right(b)."
+Selective functors sit **between Applicative and Monad**.
 
-Andrey Mokhov
+They allow **conditional execution of effects** while still preserving some static structure of the program.
+
+* Applicative: run **all effects**
+* Monad: run effects **depending on previous results**
+* Selective: **skip some effects**, but dependency structure remains partially static
+
+Introduced by **Andrey Mokhov (2019)**.
 
 ```scala
 trait Selective[F[_]] extends Applicative[F] {
-  def handle[A, B](fab: F[Either[A, B]], ff: F[A => B]): F[B]
-  def select[A, B, C](fab: F[Either[A, B]], fac: F[A => C], fbc: F[B => C]): F[C]
+  def select[A, B](fab: F[Either[A, B]], ff: F[A => B]): F[B]
 }
 ```
 
-* Implementations: [Haskell](http://hackage.haskell.org/package/selective/docs/Control-Selective.html), [Scala: cb372/cats-selective](https://github.com/cb372/cats-selective/blob/master/core/src/main/scala/cats/Selective.scala), [Idris](https://github.com/clayrat/idris-selective/blob/master/src/Control/Selective.idr), [Agda: tuura/selective-theory-agda](https://github.com/tuura/selective-theory-agda/blob/master/src/Selective.agda)
+Intuition:
 
-* Resources:
-    * Selective functor in sbt - @eed3si9n [(blog post)](http://eed3si9n.com/selective-functor-in-sbt)
-    * Staged Selective Parser Combinators - [paper](https://dl.acm.org/doi/10.1145/3409002), [ICFP 2020 talk](https://www.youtube.com/watch?v=lH65PvRgm8M)
-    * (Haskell) Selective applicative functors - Andrey Mokhov [(blog post)](https://blogs.ncl.ac.uk/andreymokhov/selective/), [(video)](https://www.youtube.com/watch?v=7vruj4gj38Q)
-    * (Haskell) Selective Applicative Functors Declare Your Effects Statically, Select Which to Execute Dynamically - Andrey Mokhov, Georgy Lukyanov, Simon Marlow, Jeremie Dimino [(paper)](https://www.staff.ncl.ac.uk/andrey.mokhov/selective-functors.pdf)
-    * (OCaml) [snowleopard/selective-ocaml](https://github.com/snowleopard/selective-ocaml)
-    * (Coq) [tuura/selective-theory-coq](https://github.com/tuura/selective-theory-coq)
-    * (Haskell) Haskell Cafe: Applicative functors with branch/choice? [(mail archive)](https://mail.haskell.org/pipermail/haskell-cafe/2012-July/102518.html)
+```
+F[Either[A,B]]  +  F[A => B]
+        │
+        │ select
+        ▼
+       F[B]
+```
+
+* If value is `Right(b)` → return `b`, **skip function effect**
+* If value is `Left(a)` → apply function `A => B`
+
+So effects in `ff` **may or may not run**.
+
+---
+
+### Derived combinators
+
+```scala
+def handle[A, B](fab: F[Either[A, B]], ff: F[A => B]): F[B] =
+  select(fab, ff)
+```
+
+```scala
+def branch[A, B, C](
+  fab: F[Either[A, B]],
+  fac: F[A => C],
+  fbc: F[B => C]
+): F[C]
+```
+
+`branch` allows selecting between **two effectful branches**.
+
+---
+
+### Selective Laws
+
+Selective laws ensure compatibility with `Functor` and `Applicative`.
+
+#### 1 Identity
+
+Selecting with the identity function does nothing.
+
+```
+select(x, pure(identity)) == map(x)(_.merge)
+```
+
+Diagram intuition:
+
+```
+F[Either[A,A]]
+       │
+       │ select identity
+       ▼
+      F[A]
+```
+
+---
+
+#### 2 Distributivity
+
+```
+select(pure(x), y) == pure(x.fold(identity, identity))
+```
+
+Selecting on a pure value behaves like normal computation.
+
+---
+
+#### 3 Associativity
+
+Associativity ensures nested selects behave consistently.
+
+```
+select(select(x, y), z)
+==
+select(x, select(y, map(z)(f => g => f compose g)))
+```
+
+This law ensures **predictable evaluation structure**.
+
+---
+
+### Relationship with other abstractions
+
+```
+Functor
+   │
+   ▼
+Applicative
+   │
+   ▼
+Selective
+   │
+   ▼
+Monad
+```
+
+Capabilities:
+
+| abstraction | conditional effects | static structure |
+|-------------|--------------------|------------------|
+| Applicative | ❌ | ✔ |
+| Selective | ✔ (partial) | ✔ |
+| Monad | ✔ | ❌ |
+
+Selective allows **some dynamic control flow without giving up static analysis**.
+
+This makes it useful for:
+
+* static analysis
+* build systems
+* effect planning
+* dependency graphs
+
+---
+
+### Category theory insight
+
+Selective functors correspond roughly to **applicative functors with conditional branching**.
+
+Important observations:
+
+* Applicatives correspond to **strong lax monoidal functors**
+* Monads correspond to **monoids in the category of endofunctors**
+* Selectives lie **between them**
+
+They preserve enough structure to allow **static analysis of effects** while enabling **data-dependent execution**.
+
+Selective programs can often be interpreted as **effect graphs with optional edges**.
+
+---
+
+### Minimal implementation
+
+Either of these is sufficient:
+
+```
+select
+```
+
+or
+
+```
+branch
+```
+
+Other combinators can be derived.
+
+---
+
+### Implementations
+
+* Implementations: [Haskell](http://hackage.haskell.org/package/selective/docs/Control-Selective.html), [Scala: cb372/cats-selective](https://github.com/cb372/cats-selective/blob/master/core/src/main/scala/cats/Selective.scala), [Idris](https://github.com/clayrat/idris-selective/blob/master/src/Control/Selective.idr), (OCaml) [snowleopard/selective-ocaml](https://github.com/snowleopard/selective-ocaml)
+
+* Formalization in Agda: [tuura/selective-theory-agda](https://github.com/tuura/selective-theory-agda/blob/master/src/Selective.agda), in Rocq: [tuura/selective-theory-coq](https://github.com/tuura/selective-theory-coq)
+---
+
+### Resources
+
+* **Selective Applicative Functors Declare Your Effects Statically, Select Which to Execute Dynamically - Andrey Mokhov, Georgy Lukyanov, Simon Marlow, Jeremie Dimino (2019)** [(paper)](https://dl.acm.org/doi/abs/10.1145/3341694)  
+* (Haskell) **Selective applicative functors** - Andrey Mokhov [(blog post)](https://blogs.ncl.ac.uk/andreymokhov/selective/), [(talk)](https://www.youtube.com/watch?v=7vruj4gj38Q)
+* Selective functor in SBT - @eed3si9n [(blog post)](http://eed3si9n.com/selective-functor-in-sbt)
+
+* Advanced resources:
+    * Build Systems à la Carte: Theory and Practice [(paper)](https://simon.peytonjones.org/assets/pdfs/build-systems-jfp.pdf)
+    * Staged Selective Parser Combinators - [paper](https://dl.acm.org/doi/10.1145/3409002), [ICFP 2020 talk](https://www.youtube.com/watch?v=lH65PvRgm8M) 
     * [copumpkin/SelectiveSigma.hs](https://gist.github.com/copumpkin/d5bdbc7afda54ff04049b6bdbcffb67e#file-selectivesigma-hs-L38-L39)
-    * [Twitter discussion in what category Selective are monoids or skew monoids](https://twitter.com/lysxia/status/1410250357704253443)
+    * Selective Applicative Functors - @MonoidMusician - [blog post](https://blog.veritates.love/selective_applicatives_theoretical_basis.html) exploring mathematical side
+
+---
+
+### Intuition summary
+
+Selective functors give a middle ground:
+
+```
+Applicative: run everything
+Selective: maybe run some things
+Monad: run things depending on previous results
+```
+
+They are useful when you want **conditional effects but still keep analyzable structure**.
+
 
 ### Monad
 
